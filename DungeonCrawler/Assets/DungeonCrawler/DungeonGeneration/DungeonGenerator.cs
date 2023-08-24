@@ -1,12 +1,24 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace DungeonCrawler.DungeonGeneration
 {
-    public static class DungeonGenerator
+    public class DungeonGenerator : MonoBehaviour
     {
-        private static Dungeon _dungeon;
-        public static IEnumerator StartGeneratingDungeon(int levelAmount, int roomAmountPerLevel)
+        [SerializeField] 
+        private Vector2 roomPositionRangeX = new Vector2();
+        [SerializeField] 
+        private Vector2 roomPositionRangeY = new Vector2();
+        [SerializeField]
+        private Vector2 roomSizeRangeX = new Vector2();
+        [SerializeField]
+        private Vector2 roomSizeRangeY = new Vector2();
+        [SerializeField]
+        private float _separationIntensity = 1f;
+        
+        private Dungeon _dungeon;
+        public IEnumerator StartGeneratingDungeon(int levelAmount, int roomAmountPerLevel)
         {
             _dungeon = new Dungeon();
             for (int i = 0; i < levelAmount; i++)
@@ -18,17 +30,17 @@ namespace DungeonCrawler.DungeonGeneration
             }
         }
 
-        public static Dungeon GetGeneratedDungeon()
+        public Dungeon GetGeneratedDungeon()
         {
             return _dungeon;
         }
 
-        private static IEnumerator SeparateRooms(int dungeonLevelNumber)
+        private IEnumerator SeparateRooms(int dungeonLevelNumber)
         {
             DungeonLevel dungeonLevel = _dungeon.Levels[dungeonLevelNumber];
             int tryCount = 0;
             int roomsWithoutOverlaps;
-            Vector2Int[] roomOffsetDirections = new Vector2Int[dungeonLevel.Rooms.Count];
+            Vector2[] roomOffsetDirections = new Vector2[dungeonLevel.Rooms.Count];
             do
             {
                 tryCount++;
@@ -52,7 +64,7 @@ namespace DungeonCrawler.DungeonGeneration
                     if (overlapCount > 0)
                     {
                         separationDirection /= (float)overlapCount;
-                        roomOffsetDirections[i] = new Vector2Int(Mathf.CeilToInt(separationDirection.x),Mathf.CeilToInt(separationDirection.y));
+                        roomOffsetDirections[i] = separationDirection;
                     }
                     else
                     {
@@ -64,21 +76,21 @@ namespace DungeonCrawler.DungeonGeneration
                 for (int i = 0; i < dungeonLevel.Rooms.Count; i++)
                 {
                     DungeonRoom room = dungeonLevel.Rooms[i];
-                    room.Position -= roomOffsetDirections[i];
+                    room.Position -= roomOffsetDirections[i] * _separationIntensity;
                 }
 
-                yield return new WaitForSeconds(0.1f);
+                yield return null;
             } while (roomsWithoutOverlaps != dungeonLevel.Rooms.Count && tryCount < 1000);
             
         }
 
-        private static DungeonLevel GenerateDungeonLevel(int roomAmountPerLevel)
+        private DungeonLevel GenerateDungeonLevel(int roomAmountPerLevel)
         {
             DungeonLevel dungeonLevel = new DungeonLevel();
             for (int i = 0; i < roomAmountPerLevel; i++)
             {
-                Vector2Int pos = new Vector2Int(Random.Range(-15, 15),Random.Range(-15, 15));
-                Vector2Int size = new Vector2Int(Random.Range(3, 15),Random.Range(3, 15));
+                Vector2 pos = new Vector2(Random.Range(roomPositionRangeX.x, roomPositionRangeX.y),Random.Range(roomPositionRangeY.x, roomPositionRangeY.y));
+                Vector2 size = new Vector2(Random.Range(roomSizeRangeX.x, roomSizeRangeX.y),Random.Range(roomSizeRangeY.x, roomSizeRangeY.y));
                 DungeonRoom dungeonRoom = new DungeonRoom(pos,size);
                 dungeonLevel.AddRoom(dungeonRoom);
             }

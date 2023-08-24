@@ -6,6 +6,7 @@ namespace DungeonCrawler
 {
     public class DungeonManager : MonoBehaviour
     {
+        [SerializeField] private DungeonGenerator _dungeonGenerator = null;
         [SerializeField] private Dungeon _myDungeon = null;
         public Dungeon CurrentDungeon => _myDungeon;
         
@@ -13,8 +14,8 @@ namespace DungeonCrawler
         private void StartGeneration()
         {
             
-            StartCoroutine(DungeonGenerator.StartGeneratingDungeon(1, 20));
-            _myDungeon = DungeonGenerator.GetGeneratedDungeon();
+            StartCoroutine(_dungeonGenerator.StartGeneratingDungeon(1, 20));
+            _myDungeon = _dungeonGenerator.GetGeneratedDungeon();
         }
     }
 }

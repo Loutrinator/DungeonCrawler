@@ -7,22 +7,22 @@ namespace DungeonCrawler
     public class DungeonRoom
     {
         [SerializeField]
-        private Vector2Int _size = Vector2Int.zero;
+        private Vector2 _size = Vector2.zero;
         [SerializeField]
-        private Vector2Int _position = Vector2Int.zero;
+        private Vector2 _position = Vector2.zero;
 
-        private Vector2Int _min = Vector2Int.zero;
-        private Vector2Int _max = Vector2Int.zero;
+        private Vector2 _min = Vector2.zero;
+        private Vector2 _max = Vector2.zero;
 
         private Rect _rect;
-        public Vector2Int Min => _min;
-        public Vector2Int Max => _max;
-        public Vector2Int TL => new Vector2Int(_min.x,_max.y);
-        public Vector2Int TR => _max;
-        public Vector2Int BL => _min;
-        public Vector2Int BR => new Vector2Int(_max.x,_min.y);
+        public Vector2 Min => _min;
+        public Vector2 Max => _max;
+        public Vector2 TL => new Vector2(_min.x,_max.y);
+        public Vector2 TR => _max;
+        public Vector2 BL => _min;
+        public Vector2 BR => new Vector2(_max.x,_min.y);
 
-        public Vector2Int Position
+        public Vector2 Position
         {
             get
             {
@@ -37,13 +37,13 @@ namespace DungeonCrawler
 
         private void RecalculateBounds()
         {
-            _min = new Vector2Int(_position.x - Mathf.FloorToInt(_size.x / 2f),
-                _position.y - Mathf.FloorToInt(_size.y / 2f));
-            _max = new Vector2Int(_position.x + Mathf.CeilToInt(_size.x / 2f),
-                _position.y + Mathf.CeilToInt(_size.y / 2f));
+            _min = new Vector2(_position.x - _size.x / 2f,
+                _position.y - _size.y / 2f);
+            _max = new Vector2(_position.x + _size.x / 2f,
+                _position.y + _size.y / 2f);
         }
 
-        public DungeonRoom(Vector2Int position, Vector2Int size)
+        public DungeonRoom(Vector2 position, Vector2 size)
         {
             _position = position;
             _size = size;
