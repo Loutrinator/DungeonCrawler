@@ -473,11 +473,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 952aed07141d4b93bafb39446e39630f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _levelAmount: 1
+  _roomsPerLevel: 50
   roomPositionRangeX: {x: -10, y: 10}
   roomPositionRangeY: {x: -10, y: 10}
-  roomSizeRangeX: {x: 3, y: 25}
-  roomSizeRangeY: {x: 3, y: 25}
-  _separationIntensity: 1
+  roomSizeRangeX: {x: 2, y: 15}
+  roomSizeRangeY: {x: 2, y: 15}
+  _separationIntensity: 0.5
 --- !u!4 &1742860210
 Transform:
   m_ObjectHideFlags: 0

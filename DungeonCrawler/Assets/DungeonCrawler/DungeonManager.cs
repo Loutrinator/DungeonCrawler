@@ -14,7 +14,7 @@ namespace DungeonCrawler
         private void StartGeneration()
         {
             
-            StartCoroutine(_dungeonGenerator.StartGeneratingDungeon(1, 20));
+            StartCoroutine(_dungeonGenerator.StartGeneratingDungeon());
             _myDungeon = _dungeonGenerator.GetGeneratedDungeon();
         }
     }
