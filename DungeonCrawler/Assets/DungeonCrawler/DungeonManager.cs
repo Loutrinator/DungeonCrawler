@@ -1,5 +1,6 @@
 ﻿using DungeonCrawler.DungeonGeneration;
 using UnityEngine;
+using UnityExtendedEditor.Attributes;
 
 namespace DungeonCrawler
 {
@@ -7,9 +8,13 @@ namespace DungeonCrawler
     {
         [SerializeField] private Dungeon _myDungeon = null;
         public Dungeon CurrentDungeon => _myDungeon;
-        private void Start()
+        
+        [Button]    
+        private void StartGeneration()
         {
-            _myDungeon = DungeonGenerator.GenerateDungeon(1,20);
+            
+            StartCoroutine(DungeonGenerator.StartGeneratingDungeon(1, 20));
+            _myDungeon = DungeonGenerator.GetGeneratedDungeon();
         }
     }
 }

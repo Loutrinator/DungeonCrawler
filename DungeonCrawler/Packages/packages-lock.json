@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.sikny.unityextendededitor": {
+      "version": "0.2.9",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "http://sikny.ovh:4873"
+    },
     "com.unity.2d.animation": {
       "version": "7.0.6",
       "depth": 1,
