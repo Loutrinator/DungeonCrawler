@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using DungeonCrawler.Utilities.Math;
 using UnityEngine;
 
 namespace DungeonCrawler
@@ -13,6 +16,7 @@ namespace DungeonCrawler
 
         private Vector2Int _min = Vector2Int.zero;
         private Vector2Int _max = Vector2Int.zero;
+        private Point _point = null;
         
         private bool _isGameplay;
         public Vector2Int Min => _min;
@@ -21,6 +25,8 @@ namespace DungeonCrawler
         public Vector2Int TR => _max;
         public Vector2Int BL => _min;
         public Vector2Int BR => new Vector2Int(_max.x,_min.y);
+
+        public Point Point => _point;
 
         public Vector2Int Position
         {
@@ -31,6 +37,7 @@ namespace DungeonCrawler
             set
             {
                 _position = value;
+                _point = new Point(new Vector3(_position.x, _position.y, 0));
                 RecalculateBounds();
             }
         }
@@ -49,6 +56,7 @@ namespace DungeonCrawler
         public DungeonRoom(Vector2Int position, Vector2Int size)
         {
             _position = position;
+            _point = new Point(new Vector3(_position.x, _position.y, 0));
             _size = size;
             _isGameplay = false;
             RecalculateBounds();
@@ -66,6 +74,20 @@ namespace DungeonCrawler
         public void SetGameplay(bool isGameplay)
         {
             _isGameplay = isGameplay;
+        }
+
+        public HashSet<Vector2Int> GetPositions()
+        {
+            HashSet<Vector2Int> positions = new HashSet<Vector2Int>();
+            for (int x = _min.x; x < _max.x; x++)
+            {
+                for (int y = _min.y; y < _max.y; y++)
+                {
+                    positions.Add(new Vector2Int(x, y));
+                }
+            }
+
+            return positions;
         }
     }
 }

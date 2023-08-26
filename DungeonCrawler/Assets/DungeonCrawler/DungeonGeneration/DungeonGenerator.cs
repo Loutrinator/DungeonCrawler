@@ -1,6 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using DungeonCrawler.Utilities.Math;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 namespace DungeonCrawler.DungeonGeneration
 {
@@ -24,9 +28,12 @@ namespace DungeonCrawler.DungeonGeneration
         private float _gameplayRoomsPercentage = 0.3f;
         
         private Dungeon _dungeon;
-        public IEnumerator StartGeneratingDungeon()
+        private Action _onGenerationFinished = null; 
+        
+        public IEnumerator StartGeneratingDungeon(Action onGenerationFinished)
         {
             _dungeon = new Dungeon();
+            _onGenerationFinished = onGenerationFinished;
             for (int i = 0; i < _levelAmount; i++)
             {
                 DungeonLevel dungeonlevel = GenerateDungeonLevel(_roomsPerLevel);
@@ -36,9 +43,76 @@ namespace DungeonCrawler.DungeonGeneration
                 SortRoomsByArea(i);
                 RemoveRemainingOverlaps(i);
                 SelectGameplayRooms(i);
+                DelaunayOnGameplayRooms(i);
             }
         }
 
+        private void DelaunayOnGameplayRooms(int dungeonLevelNumber)
+        {
+            DungeonLevel dungeonLevel = _dungeon.Levels[dungeonLevelNumber];
+            var points = dungeonLevel.GetGameplayRoomPoints();
+            Graph graph = new Graph();
+            graph.points = points;
+            DelaunayManager.Instance.ResetManager();
+            DelaunayManager.Instance.IncrementalTriangulation(graph);
+            DelaunayManager.Instance.FlipStart(graph, MinimumSpanningTree);
+            
+        }
+
+        private void MinimumSpanningTree(Graph graph)
+        {
+            _onGenerationFinished?.Invoke();
+            /*
+             Define an empty List A = [ ]
+            For each vertex V
+            Make-Set(V)
+            Sort edges of graph order by weight
+            For each edge E (u, v)
+            If Find-Set(u) != Find-Set(v)
+            Append E (u, v) in A
+            Union (u, v)
+            Return A
+            */
+        }
+        
+        /*
+        public static void Kruskal(Graph graph)
+        {
+            int verticesCount = graph.points.Count;
+            Edge[] result = new Edge[verticesCount];
+            int i = 0;
+            int e = 0;
+
+            graph.edges.Sort((e1, e2) => e1.Length.CompareTo(e2.Length));  //, delegate (Edge a, Edge b)
+            //{
+            //    return a.Weight.CompareTo(b.Weight);
+            //});
+
+            Subset[] subsets = new Subset[verticesCount];
+
+            for (int v = 0; v < verticesCount; ++v)
+            {
+                subsets[v].Parent = v;
+                subsets[v].Rank = 0;
+            }
+
+            while (e < verticesCount - 1)
+            {
+                Edge nextEdge = graph.edge[i++];
+                int x = Find(subsets, nextEdge.Source);
+                int y = Find(subsets, nextEdge.Destination);
+
+                if (x != y)
+                {
+                    result[e++] = nextEdge;
+                    Union(subsets, x, y);
+                }
+            }
+
+            Print(result, e);
+        }
+        */
+        
         private void RemoveRemainingOverlaps(int dungeonLevelNumber)
         {
             DungeonLevel dungeonLevel = _dungeon.Levels[dungeonLevelNumber];
