@@ -1,4 +1,5 @@
-﻿using DungeonCrawler.DungeonGeneration;
+﻿using System.Collections.Generic;
+using DungeonCrawler.DungeonGeneration;
 using UnityEngine;
 using UnityExtendedEditor.Attributes;
 
@@ -16,6 +17,14 @@ namespace DungeonCrawler
         {
             
             StartCoroutine(_dungeonGenerator.StartGeneratingDungeon(OnDungeonGenerated));
+        }
+        [Button]    
+        private void TestTilemap()
+        {
+            _tilemapVisualizer.PaintSingleTile(new Vector2Int(5, 2));
+            _tilemapVisualizer.PaintSingleTile(new Vector2Int(8, 1));
+            _tilemapVisualizer.PaintSingleTile(new Vector2Int(4, 3));
+            _tilemapVisualizer.PaintSingleTile(new Vector2Int(8, 4));
         }
 
         public void OnDungeonGenerated()

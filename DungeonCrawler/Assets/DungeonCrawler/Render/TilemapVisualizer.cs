@@ -16,6 +16,11 @@ public class TilemapVisualizer : MonoBehaviour
         PaintTiles(positions, _tilemap, _tileBase);
     }
 
+
+    public void PaintSingleTile(Vector2Int position)
+    {
+        _tilemap.SetTile((Vector3Int)position,_tileBase);
+    }
     public void DebugPaintTiles()
     {
         PaintSingleTile(new Vector2Int(0,0), _tilemap, _tileBase);
@@ -35,6 +40,6 @@ public class TilemapVisualizer : MonoBehaviour
     private void PaintSingleTile(Vector2Int position, Tilemap tilemap, TileBase tile)
     {
         var tilePosition = tilemap.WorldToCell((Vector3Int)position);
-        tilemap.SetTile((Vector3Int)position,tile);
+        tilemap.SetTile(tilePosition,tile);
     }
 }
