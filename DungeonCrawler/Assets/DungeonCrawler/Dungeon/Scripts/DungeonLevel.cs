@@ -16,19 +16,23 @@ namespace DungeonCrawler
         #endregion Serialized Fields
         
         public List<DungeonRoom> Rooms => _rooms;
+        private HashSet<Vector2Int> _roomPositions = new HashSet<Vector2Int>();
+        private HashSet<Vector2Int> _wallPositions = new HashSet<Vector2Int>();
+        public HashSet<Vector2Int> RoomPositions => _roomPositions;
+        public HashSet<Vector2Int> WallPositions => _wallPositions;
 
-        public HashSet<Vector2Int> GetRoomPositions
+        public void ComputeFloorPositions()
         {
-            get
-            {
-                HashSet<Vector2Int> roomPositions = new HashSet<Vector2Int>();
+            _roomPositions.Clear();
                 foreach (var room in _rooms)
                 {
-                    roomPositions.UnionWith(room.GetPositions());
+                    _roomPositions.UnionWith(room.GetPositions());
                 }
+        }
 
-                return roomPositions;
-            }
+        public void SetWallPositions(HashSet<Vector2Int> wallPositions)
+        {
+            _wallPositions = wallPositions;
         }
 
         public DungeonLevel()
@@ -47,5 +51,6 @@ namespace DungeonCrawler
         {
             return _rooms.FindAll(r => r.IsGameplay).Select(r => r.Point).ToList();
         }
+
     }
 }

@@ -8,38 +8,27 @@ public class TilemapVisualizer : MonoBehaviour
     [SerializeField]
     private Tilemap _tilemap = null;
 
-    [SerializeField]
-    private TileBase _tileBase = null;
-
-    public void PaintTiles(IEnumerable<Vector2Int> positions)
+    public void ClearTiles()
     {
-        PaintTiles(positions, _tilemap, _tileBase);
+        _tilemap.ClearAllTiles();
     }
 
-
-    public void PaintSingleTile(Vector2Int position)
+    public void BoxFill(Vector2Int min, Vector2Int max, TileBase tile)
     {
-        _tilemap.SetTile((Vector3Int)position,_tileBase);
+        _tilemap.BoxFill((Vector3Int)min,tile,min.x,max.x,min.y,max.y);
     }
-    public void DebugPaintTiles()
-    {
-        PaintSingleTile(new Vector2Int(0,0), _tilemap, _tileBase);
-        PaintSingleTile(new Vector2Int(0,1), _tilemap, _tileBase);
-        PaintSingleTile(new Vector2Int(1,0), _tilemap, _tileBase);
-        PaintSingleTile(new Vector2Int(1,1), _tilemap, _tileBase);
-    }
-
-    private void PaintTiles(IEnumerable<Vector2Int> positions, Tilemap tilemap, TileBase tileBase)
+    
+    protected void DrawTiles(IEnumerable<Vector2Int> positions, TileBase tileBase)
     {
         foreach (var position in positions)
         {
-            PaintSingleTile(position, tilemap, tileBase);
+            DrawSingleTile(position, tileBase);
         }
     }
 
-    private void PaintSingleTile(Vector2Int position, Tilemap tilemap, TileBase tile)
+    private void DrawSingleTile(Vector2Int position, TileBase tile)
     {
-        var tilePosition = tilemap.WorldToCell((Vector3Int)position);
-        tilemap.SetTile(tilePosition,tile);
+        var tilePosition = _tilemap.WorldToCell((Vector3Int)position);
+        _tilemap.SetTile(tilePosition,tile);
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using DungeonCrawler.DungeonGeneration;
+using DungeonCrawler.Render;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityExtendedEditor.Attributes;
 
 namespace DungeonCrawler
@@ -9,7 +11,7 @@ namespace DungeonCrawler
     {
         [SerializeField] private DungeonGenerator _dungeonGenerator = null;
         [SerializeField] private Dungeon _myDungeon = null;
-        [SerializeField] private TilemapVisualizer _tilemapVisualizer = null;
+        [SerializeField] private DungeonVisualizer _dungeonVisualizer = null;
         public Dungeon CurrentDungeon => _myDungeon;
         
         [Button]    
@@ -18,19 +20,13 @@ namespace DungeonCrawler
             
             StartCoroutine(_dungeonGenerator.StartGeneratingDungeon(OnDungeonGenerated));
         }
-        [Button]    
-        private void TestTilemap()
-        {
-            _tilemapVisualizer.PaintSingleTile(new Vector2Int(5, 2));
-            _tilemapVisualizer.PaintSingleTile(new Vector2Int(8, 1));
-            _tilemapVisualizer.PaintSingleTile(new Vector2Int(4, 3));
-            _tilemapVisualizer.PaintSingleTile(new Vector2Int(8, 4));
-        }
 
         public void OnDungeonGenerated()
         {
             _myDungeon = _dungeonGenerator.GetGeneratedDungeon();
-            _tilemapVisualizer.PaintTiles(_myDungeon.Levels[0].GetRoomPositions);
+            _dungeonVisualizer.ClearTiles();
+            _dungeonVisualizer.DrawRooms(_myDungeon.Levels[0].RoomPositions);
+            _dungeonVisualizer.DrawWalls(_myDungeon.Levels[0].WallPositions);
         }
     }
 }

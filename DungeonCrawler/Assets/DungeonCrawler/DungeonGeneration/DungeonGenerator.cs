@@ -44,6 +44,7 @@ namespace DungeonCrawler.DungeonGeneration
                 RemoveRemainingOverlaps(i);
                 SelectGameplayRooms(i);
                 DelaunayOnGameplayRooms(i);
+                
             }
         }
 
@@ -61,6 +62,11 @@ namespace DungeonCrawler.DungeonGeneration
 
         private void MinimumSpanningTree(Graph graph)
         {
+            foreach (var dungeonlevel in _dungeon.Levels)
+            {
+                dungeonlevel.ComputeFloorPositions();
+                dungeonlevel.SetWallPositions(WallGenerator.GetWalls(dungeonlevel));
+            }
             _onGenerationFinished?.Invoke();
             /*
              Define an empty List A = [ ]
