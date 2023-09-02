@@ -9,6 +9,8 @@ namespace DungeonCrawler.Utilities.Math
         public Vector3 Position;
         public GameObject Go;
 
+        public int Index = 0;
+
         public Point()
         {
         }

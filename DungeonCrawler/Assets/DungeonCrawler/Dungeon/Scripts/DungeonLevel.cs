@@ -26,7 +26,10 @@ namespace DungeonCrawler
             _roomPositions.Clear();
                 foreach (var room in _rooms)
                 {
-                    _roomPositions.UnionWith(room.GetPositions());
+                    if (room.IsGameplay)
+                    {
+                        _roomPositions.UnionWith(room.GetPositions());
+                    }
                 }
         }
 

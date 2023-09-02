@@ -13,6 +13,11 @@ namespace DungeonCrawler.Utilities.Math
         public Point secondPoint => points[1];
         public float Length => (firstPoint.Position - secondPoint.Position).magnitude;
 
+        public int CompareTo(Edge otherEdge)
+        {
+            return Length.CompareTo(otherEdge.Length);
+        }
+
         public Edge()
         {
             points[0] = new Point();
